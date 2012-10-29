@@ -1,0 +1,11 @@
+In IntBoard.java, in function calcTargets, variable 'k' was renamed to 'i' to better designate an incrementing variable. 
+
+Moved BoardAdjTargetTests.java and BoardTest.java to test package.
+
+In BoardCell, added getters for row and column.
+
+In Board.java, refactored 'visited' function in to 'clearVisted' and made function public.
+
+refactor calcTargets so that it resets visited array when first being called.
+refactor calcTargets to take row and col
+Added constructor to ComputerPlayer.java for testing.
