@@ -318,16 +318,42 @@ public class Board {
 	}
 
 	// ---Calculate Targets---
+//	public void calcTargets(int indx, int steps) {
+//		clearVisited();
+//		_calcTargets(indx, steps);
+//	}
+//	private void _calcTargets(int indx, int steps) {
+//		int rowT = this.getRow(indx, numColumns);
+//		int colT = this.getColumn(indx, numColumns);
+//
+//		calcTargets(rowT, colT, steps);
+//	}
+	
+	// ---Calculate Targets---
 	public void calcTargets(int indx, int steps) {
-		clearVisited();
-		_calcTargets(indx, steps);
-	}
-	private void _calcTargets(int indx, int steps) {
 		int rowT = this.getRow(indx, numColumns);
 		int colT = this.getColumn(indx, numColumns);
 
-		calcTargets(rowT, colT, steps);
+		if ((visited[rowT][colT] == false && steps == 0)) {
+			targets.add(getCellAt(rowT, colT));
+			return;
+		} else {
+			for (int k : adj.get(getCellAt(numColumns * rowT + colT))) {
+				visited[rowT][colT] = true;
+				if (!visited[(int) (k / numColumns)][k % numColumns]) {
+					if (getCellAt(k).isDoorway()){
+						targets.add(getCellAt(k));
+					}
+					calcTargets(k, steps - 1);
+				}
+				visited[rowT][colT] = false;
+			}
+			
+		}
+
 	}
+	
+	
 	public void calcTargets(int row, int col, int steps) {
 		clearVisited();
 		_calcTargets(row, col, steps);
@@ -343,7 +369,7 @@ public class Board {
 					if (getCellAt(k).isDoorway()){
 						targets.add(getCellAt(k));
 					}
-					_calcTargets(k, steps - 1);
+					//_calcTargets(k, steps - 1);
 				}
 				visited[row][col] = false;
 			}

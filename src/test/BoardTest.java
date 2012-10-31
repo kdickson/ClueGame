@@ -84,11 +84,11 @@ public class BoardTest  {
     	RoomCell r = board.getRoomCellAt(0, 0);
     	Assert.assertFalse(r.isDoorway());
     	//Right
-    	r = board.getRoomCellAt(4, 3);
+    	r = board.getRoomCellAt(4, 2);
     	Assert.assertTrue(r.isDoorway());
     	Assert.assertEquals(RoomCell.DoorDirection.RIGHT, r.getDoorDir());
     	//UP
-    	r = board.getRoomCellAt(14, 11);
+    	r = board.getRoomCellAt(15, 11);
     	Assert.assertTrue(r.isDoorway());
     	Assert.assertEquals(RoomCell.DoorDirection.UP, r.getDoorDir());
     	//Down
