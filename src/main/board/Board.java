@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 	}
 	public boolean checkAccusation(Card person, Card room, Card weapon){
-		return true;
+		return person.equals(answerPerson) && room.equals(answerRoom) && weapon.equals(answerWeapon);
 	}
 	
 
@@ -147,6 +148,15 @@ public class Board {
 		}
 	}
 
+	public Card getRoomCardFromCell(BoardCell bc){
+		System.out.println("room name");
+		System.out.println(rooms.get(bc.toString().charAt(0)));
+		
+		Card c = new Card(rooms.get(bc.toString().charAt(0)),Card.CardType.ROOM);
+		return c;
+	}
+	
+	
 	// ---DONE---
 	public void loadLegend(String path) {
 		FileReader reader;
@@ -166,7 +176,6 @@ public class Board {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	// ---Get The Index Of A Cell Using Row and Col---
@@ -354,27 +363,27 @@ public class Board {
 	}
 	
 	
-	public void calcTargets(int row, int col, int steps) {
-		clearVisited();
-		_calcTargets(row, col, steps);
-	}
-	public void _calcTargets(int row, int col, int steps) {
-		if ((visited[row][col] == false && steps == 0)) {
-			targets.add(getCellAt(row, col));
-			return;
-		} else {
-			for (int k : adj.get(getCellAt(numColumns * row + col))) {
-				visited[row][col] = true;
-				if (!visited[(int) (k / numColumns)][k % numColumns]) {
-					if (getCellAt(k).isDoorway()){
-						targets.add(getCellAt(k));
-					}
-					//_calcTargets(k, steps - 1);
-				}
-				visited[row][col] = false;
-			}
-		}
-	}
+//	public void calcTargets(int row, int col, int steps) {
+//		clearVisited();
+//		_calcTargets(row, col, steps);
+//	}
+//	public void _calcTargets(int row, int col, int steps) {
+//		if ((visited[row][col] == false && steps == 0)) {
+//			targets.add(getCellAt(row, col));
+//			return;
+//		} else {
+//			for (int k : adj.get(getCellAt(numColumns * row + col))) {
+//				visited[row][col] = true;
+//				if (!visited[(int) (k / numColumns)][k % numColumns]) {
+//					if (getCellAt(k).isDoorway()){
+//						targets.add(getCellAt(k));
+//					}
+//					//_calcTargets(k, steps - 1);
+//				}
+//				visited[row][col] = false;
+//			}
+//		}
+//	}
 
 	// ---Set Of Targets---
 	public Set<BoardCell> getTargets() {
@@ -432,6 +441,26 @@ public class Board {
 
 	}
 	public Card handleSuggestion(Card person, Card room, Card weapon){
+		ArrayList<Player> allPlayers = new ArrayList<Player>();
+		for(Player p : computerPlayers){
+			if(p!=currentPlayer)
+				allPlayers.add(p);
+		}
+		if(humanPlayer!=currentPlayer){
+			allPlayers.add(humanPlayer);	
+		}
+		
+		ArrayList<Card> cards = new ArrayList<Card>();
+		for(Player p: allPlayers ){
+			Card c = p.disproveSuggestion(person, room, weapon);
+			if(c != null){
+				cards.add(c);
+			}
+		}
+		if(cards.size()>0){
+			return cards.get(new Random().nextInt(cards.size()));
+		}
+		
 		return null;
 	}
 	public Player getHumanPlayer() {

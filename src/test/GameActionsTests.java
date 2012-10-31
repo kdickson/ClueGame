@@ -25,15 +25,16 @@ public class GameActionsTests {
 		b = new Board();
 		b.loadConfigFiles("work1.csv");
 		b.loadLegend("initials.csv");
+		b.calcAdjacencies();
 		scarlet = new Card("Miss Scarlet",Card.CardType.PERSON);
 		knife = new Card("Knife",Card.CardType.WEAPON);
-		hall = new Card("Hall",Card.CardType.ROOM);
+		hall = new Card("HALL",Card.CardType.ROOM);
 		green = new Card("Mr. Green",Card.CardType.PERSON);
 		candlestick = new Card("Candlestick",Card.CardType.WEAPON);
-		study = new Card("Study",Card.CardType.ROOM);
-		library = new Card("Study",Card.CardType.ROOM);
+		study = new Card("STUDY",Card.CardType.ROOM);
+		library = new Card("LIBRARY",Card.CardType.ROOM);
 		white = new Card("Mrs. White",Card.CardType.PERSON);
-		rope = new Card("Study",Card.CardType.WEAPON);
+		rope = new Card("Rope",Card.CardType.WEAPON);
 	}
 	
 	@Test
@@ -52,7 +53,8 @@ public class GameActionsTests {
 	public void testTargetRandomSelection() {
 		ComputerPlayer player = new ComputerPlayer();
 		// Pick a location with no rooms in target, just three targets
-		b.calcTargets(14, 0, 2);
+		System.out.println("going to call bal");
+		b.calcTargets(b.calcRoomIndex(14, 0), 2);
 		int loc_12_0Tot = 0;
 		int loc_14_2Tot = 0;
 		int loc_15_1Tot = 0;
@@ -81,15 +83,16 @@ public class GameActionsTests {
 		ComputerPlayer player = new ComputerPlayer();
 		player.setPreviousLocation(b.getCellAt(4,2));
 		// Pick a location that you can move into a room you were just in
-		b.calcTargets(4, 4, 2);
+		b.calcTargets(b.calcRoomIndex(4, 4), 2);
 		int loc_4_2Tot = 0;
 		int loc_5_3Tot = 0;
 		int loc_6_4Tot = 0;
 		int loc_5_5Tot = 0;
 		int loc_3_5Tot = 0;
 		int loc_2_4Tot = 0;
+		int loc_4_6Tot = 0;
 		// Run the test 100 times
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<1000; i++) {
 			BoardCell selected = player.pickLocation(b.getTargets());
 			if (selected == b.getCellAt(4, 2))
 				loc_4_2Tot++;
@@ -103,11 +106,13 @@ public class GameActionsTests {
 				loc_3_5Tot++;
 			else if (selected == b.getCellAt(2, 4))
 				loc_2_4Tot++;
+			else if (selected == b.getCellAt(4, 6))
+				loc_4_6Tot++;
 			else
 				fail("Invalid target selected");
 		}
 		// Ensure we have 100 total selections (fail should also ensure)
-		Assert.assertEquals(100, loc_4_2Tot + loc_5_3Tot + loc_6_4Tot + loc_5_5Tot + loc_3_5Tot + loc_2_4Tot);
+		Assert.assertEquals(1000, loc_4_2Tot + loc_5_3Tot + loc_6_4Tot + loc_5_5Tot + loc_3_5Tot + loc_2_4Tot + loc_4_6Tot);
 		// Ensure each target was selected more than once
 		Assert.assertTrue(loc_4_2Tot > 10);
 		Assert.assertTrue(loc_5_3Tot > 10);
@@ -122,7 +127,7 @@ public class GameActionsTests {
 		ComputerPlayer player = new ComputerPlayer();
 		player.setPreviousLocation(b.getCellAt(2,4));
 		// Pick a location that you can move into a room you were just in
-		b.calcTargets(4, 4, 2);
+		b.calcTargets(b.calcRoomIndex(4, 4), 2);
 		int loc_4_2Tot = 0;
 		int loc_5_3Tot = 0;
 		int loc_6_4Tot = 0;
@@ -168,12 +173,14 @@ public class GameActionsTests {
 		p.addCard(knife);
 		p.addCard(study);
 		//disprove weapon
+		System.out.println("assertihng");
 		Assert.assertEquals(knife,p.disproveSuggestion(white, library, knife));
 		//disprove person
 		Assert.assertEquals(green,p.disproveSuggestion(green, library, rope));
 		//disprove room
 		Assert.assertEquals(hall,p.disproveSuggestion(white, hall, rope));
 		//check can't disprove
+		System.out.println("what's it returning?");
 		Assert.assertEquals(null,p.disproveSuggestion(white, library, rope));
 	}
 	
@@ -187,7 +194,7 @@ public class GameActionsTests {
 		int scarletTot = 0;
 		int candlestickTot = 0;
 		int studyTot = 0;
-		for(int i=0;i<100;i++){
+		for(int i=0;i<1000;i++){
 			Card c = p.disproveSuggestion(scarlet, candlestick, study);
 			if(c.equals(scarlet))
 				scarletTot++;
@@ -248,14 +255,17 @@ public class GameActionsTests {
 		//one correct suggestion
 		ComputerPlayer cp1 = new ComputerPlayer();
 		cp1.resetUnseenCards();
+		System.out.println("the size of Board.deck is " + Board.deck.size());
 		for(Card c :Board.deck) {
 			if(!c.equals(green) && !c.equals(candlestick)) {
+				System.out.println("updating seen!!!!");
 				cp1.updateSeen(c);
 			}
 		}
 		//this is da hall
 		cp1.setPreviousLocation(b.getCellAt(8, 19));
 		cp1.createSuggestion();
+		
 		Assert.assertEquals(hall, cp1.getSuggestedRoom());
 		Assert.assertEquals(green, cp1.getSuggestedPerson());
 		Assert.assertEquals(candlestick, cp1.getSuggestedWeapon());

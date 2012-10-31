@@ -1,7 +1,8 @@
-package main.board;
+	package main.board;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player{
@@ -22,19 +23,72 @@ public class ComputerPlayer extends Player{
 		this.previousLocation = previousLocation;
 	}
 	public BoardCell pickLocation(Set<BoardCell> set){
+		for(BoardCell bc : set){
+			if(bc.isDoorway() && previousLocation != bc){
+				return bc;
+			}else if(bc.isRoom() && previousLocation != bc){
+				return bc;
+			}
+		}
+		int i=0;
+		int theRandom = new Random().nextInt(set.size());
+		for(BoardCell obj : set)
+		{
+		    if (i == theRandom)
+		        return obj;
+		    i = i + 1;
+		}
+		
 		return null;
 	}
 	Set<Card> unseenCards = new HashSet<Card>();
 	public void updateSeen(Card seen){
+		System.out.println("removing now "+unseenCards.size());
 		unseenCards.remove(seen);
 	}
 	public void createSuggestion(){
+		System.out.println(unseenCards.size() + "=unseenCards");
+		ArrayList<Card> suggestedRooms = new ArrayList<Card>();
+		ArrayList<Card> suggestedWeapons = new ArrayList<Card>();
+		ArrayList<Card> suggestedPersons = new ArrayList<Card>();
+		for(Card c : unseenCards){
+			switch(c.cardType){
+			case PERSON:
+				suggestedPersons.add(c);
+				break;
+			case ROOM:
+				suggestedRooms.add(c);
+				break;
+			case WEAPON:
+				suggestedWeapons.add(c);
+				break;
+			default:
+				break;
+			
+			}
+		}
+		if(suggestedRooms.size()>0)
+			suggestedRoom = suggestedRooms.get(new Random().nextInt(suggestedRooms.size()));
+		else 
+			suggestedRoom = null;
+		if(suggestedWeapons.size()>0)
+			suggestedWeapon = suggestedWeapons.get(new Random().nextInt(suggestedWeapons.size()));
+		else
+			suggestedWeapon = null;
+		if(suggestedPersons.size()>0)
+			suggestedPerson = suggestedPersons.get(new Random().nextInt(suggestedPersons.size()));
+		else
+			suggestedPerson = null;
+		
 	}
 	Card suggestedRoom;
 	Card suggestedWeapon;
 	Card suggestedPerson;
 	public Card getSuggestedRoom() {
-		return suggestedRoom;
+		Board b = new Board();
+		b.loadLegend("initials.csv");
+		return b.getRoomCardFromCell(previousLocation);
+		//return suggestedRoom;
 	}
 	public Card getSuggestedWeapon() {
 		return suggestedWeapon;
