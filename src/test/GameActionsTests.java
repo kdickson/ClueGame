@@ -255,8 +255,8 @@ public class GameActionsTests {
 		//one correct suggestion
 		ComputerPlayer cp1 = new ComputerPlayer();
 		cp1.resetUnseenCards();
-		System.out.println("the size of Board.deck is " + Board.deck.size());
-		for(Card c :Board.deck) {
+		System.out.println("the size of Board.deck is " + Board.getMasterDeck().size());
+		for(Card c :Board.getMasterDeck()) {
 			if(!c.equals(green) && !c.equals(candlestick)) {
 				System.out.println("updating seen!!!!");
 				cp1.updateSeen(c);
@@ -281,7 +281,7 @@ public class GameActionsTests {
 		int scarletAccused = 0;
 		int candlestickAccused = 0;
 		int knifeAccused = 0;
-		for(Card c :Board.deck) {
+		for(Card c :Board.getMasterDeck()) {
 			if(!c.equals(green) && !c.equals(candlestick) && !c.equals(scarlet) && !c.equals(study) && !c.equals(knife)) {
 				cp1.updateSeen(c);
 			}

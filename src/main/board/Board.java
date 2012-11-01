@@ -24,7 +24,8 @@ public class Board {
 	boolean visited[][];
 	int numRows;
 	int numColumns;
-	public static List<Card> deck = new ArrayList<Card>();
+	public List<Card> deck = new ArrayList<Card>();
+	private static List<Card> masterDeck = new ArrayList<Card>();
 	public List<ComputerPlayer> computerPlayers = new ArrayList<ComputerPlayer>();
 	public HumanPlayer humanPlayer;
 	public Player currentPlayer;
@@ -56,7 +57,6 @@ public class Board {
 			if(!room.equals('W') && !room.equals('X'))
 				deck.add( new Card( rooms.get(room),Card.CardType.ROOM));
 		}
-		System.out.println("the size of deck is " + deck.size());
 		//add persons
 		deck.add( new Card("Miss Scarlet",Card.CardType.PERSON));
 		deck.add( new Card("Colonel Mustard",Card.CardType.PERSON));
@@ -75,6 +75,27 @@ public class Board {
 //		deck = new ArrayList<Card>();
 		
 	}
+	
+	public static List<Card> getMasterDeck() {
+		//If we haven't called deal yet, make a temp board to load the deck
+		if(masterDeck.isEmpty()){
+			System.out.println("Totally empty");
+			Board mBoard = new Board();
+			try {
+				mBoard.loadConfigFiles("work1.csv");
+			} catch (BadConfigException e) {
+				//This should never happen
+				e.printStackTrace();
+				System.exit(1);
+			}
+			mBoard.loadLegend("initials.csv");
+			mBoard.deal();
+			masterDeck = mBoard.deck;
+		}
+		System.out.println("some text so I know what it means" + masterDeck.size());
+		return masterDeck;
+	}
+	
 	// ---DONE---
 	public void loadConfigFiles(String path) throws BadConfigException {
 		FileReader reader;

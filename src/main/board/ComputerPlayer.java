@@ -11,7 +11,7 @@ public class ComputerPlayer extends Player{
 	}
 	public void resetUnseenCards(){
 		unseenCards = new HashSet<Card>();
-		for(Card c: Board.deck){
+		for(Card c: Board.getMasterDeck()){
 			unseenCards.add(c);	
 		}
 		

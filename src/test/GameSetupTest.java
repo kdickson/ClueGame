@@ -82,7 +82,7 @@ public class GameSetupTest {
 	public void testDealingCards() {
 		b.deal();
 		//check all cards are dealt
-//		Assert.assertEquals(0,b.deck.size());---------------------------uncomment
+		Assert.assertEquals(0,b.deck.size());
 		//All players have roughly (within one) the same number cards
 		int humanTotalCards = b.humanPlayer.cardsInHand.size();
 		for(ComputerPlayer p: b.computerPlayers){
