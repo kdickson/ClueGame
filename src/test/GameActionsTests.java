@@ -29,7 +29,7 @@ public class GameActionsTests {
 		scarlet = new Card("Miss Scarlet",Card.CardType.PERSON);
 		knife = new Card("Knife",Card.CardType.WEAPON);
 		hall = new Card("HALL",Card.CardType.ROOM);
-		green = new Card("Mr. Green",Card.CardType.PERSON);
+		green = new Card("Reverend Green",Card.CardType.PERSON);
 		candlestick = new Card("Candlestick",Card.CardType.WEAPON);
 		study = new Card("STUDY",Card.CardType.ROOM);
 		library = new Card("LIBRARY",Card.CardType.ROOM);
