@@ -58,11 +58,9 @@ public class ComputerPlayer extends Player{
 	}
 	Set<Card> unseenCards = new HashSet<Card>();
 	public void updateSeen(Card seen){
-		System.out.println("removing now "+unseenCards.size());
 		unseenCards.remove(seen);
 	}
 	public void createSuggestion(){
-		System.out.println(unseenCards.size() + "=unseenCards");
 		ArrayList<Card> suggestedRooms = new ArrayList<Card>();
 		ArrayList<Card> suggestedWeapons = new ArrayList<Card>();
 		ArrayList<Card> suggestedPersons = new ArrayList<Card>();

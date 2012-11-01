@@ -94,7 +94,6 @@ public class Board {
 	public static List<Card> getMasterDeck() {
 		//If we haven't called deal yet, make a temp board to load the deck
 		if(masterDeck.isEmpty()){
-			System.out.println("Totally empty");
 			Board mBoard = new Board();
 			try {
 				mBoard.loadConfigFiles("work1.csv");
@@ -107,7 +106,6 @@ public class Board {
 			mBoard.initializeDeck();
 			masterDeck = mBoard.deck;
 		}
-		System.out.println("some text so I know what it means" + masterDeck.size());
 		return masterDeck;
 	}
 	
@@ -214,8 +212,6 @@ public class Board {
 	}
 
 	public Card getRoomCardFromCell(BoardCell bc){
-		System.out.println("room name");
-		System.out.println(rooms.get(bc.toString().charAt(0)));
 		
 		Card c = new Card(rooms.get(bc.toString().charAt(0)),Card.CardType.ROOM);
 		return c;
@@ -493,7 +489,6 @@ public class Board {
 		//System.out.println(b.cells.get(0).isDoorway());
 		b.calcAdjacencies();
 		LinkedList<Integer> testList = b.getAdjList(b.getCellAt(0));
-		System.out.println(testList);
 		/*System.out.println(b.getCellAt(0));
 		System.out.println(b.getCellAt(1));
 		System.out.println(b.getCellAt(2));
@@ -501,8 +496,6 @@ public class Board {
 		System.out.println(b.getCellAt(4));
 		System.out.println(b.getCellAt(5));*/
 		//System.out.println(b.getCellAt(320));
-		System.out.println();
-		System.out.println(b.adj.get(b.getCellAt(4,2)));
 
 	}
 	public Card handleSuggestion(Card person, Card room, Card weapon){
@@ -545,7 +538,6 @@ public class Board {
 		humanPlayer = new HumanPlayer("Miss Scarlet", Color.red, getCellAt(14,22));
 		computerPlayers.clear();
 		computerPlayers.add(new ComputerPlayer("Mrs. Peacock", Color.blue, getCellAt(0,3)));
-		System.out.println("stuffz" + getCellAt(0,3).getCol());
 		computerPlayers.add(new ComputerPlayer("Colonel Mustard", Color.yellow, getCellAt(21,15)));
 		computerPlayers.add(new ComputerPlayer("Mrs. White", Color.white, getCellAt(12,0)));
 		computerPlayers.add(new ComputerPlayer("Professor Plum", Color.magenta, getCellAt(0,19)));
