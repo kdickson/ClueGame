@@ -1,14 +1,29 @@
 	package main.board;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player{
-	public ComputerPlayer(){
+
+	
+	
+	public ComputerPlayer(String name, Color color) {
+		super(name, color);
 		resetUnseenCards();
 	}
+	
+	
+	
+	public ComputerPlayer(String name, Color color, BoardCell currentLocation) {
+		super(name, color, currentLocation);
+		resetUnseenCards();
+	}
+
+
+
 	public void resetUnseenCards(){
 		unseenCards = new HashSet<Card>();
 		for(Card c: Board.getMasterDeck()){

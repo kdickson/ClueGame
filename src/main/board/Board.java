@@ -1,8 +1,10 @@
 package main.board;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -50,6 +52,21 @@ public class Board {
 		answerWeapon = weapon;
 	}
 	public void deal(){
+		initializeDeck();
+		
+		Collections.shuffle(deck);
+		Player allPlayers[] = new Player[]{
+			humanPlayer, computerPlayers.get(0), computerPlayers.get(1), computerPlayers.get(2), computerPlayers.get(3), computerPlayers.get(4)
+		};
+		int i = 0;
+		while(!deck.isEmpty()){
+			Card temp = deck.remove(deck.size()-1);
+			allPlayers[i%6].addCard(temp);
+			i++;
+		}
+		
+	}
+	public void initializeDeck() {
 		Set<Character> theRooms = rooms.keySet();
 		//add all of the room cards
 		deck = new ArrayList<Card>();
@@ -72,8 +89,6 @@ public class Board {
 		deck.add(new Card("Lead Pipe",Card.CardType.WEAPON));
 		deck.add(new Card("Revolver",Card.CardType.WEAPON));
 		deck.add(new Card("Wrench",Card.CardType.WEAPON));
-//		deck = new ArrayList<Card>();
-		
 	}
 	
 	public static List<Card> getMasterDeck() {
@@ -89,7 +104,7 @@ public class Board {
 				System.exit(1);
 			}
 			mBoard.loadLegend("initials.csv");
-			mBoard.deal();
+			mBoard.initializeDeck();
 			masterDeck = mBoard.deck;
 		}
 		System.out.println("some text so I know what it means" + masterDeck.size());
@@ -105,21 +120,23 @@ public class Board {
 			scn = new Scanner(reader);
 			String line;
 			String temp;
-
+			int row = 0;
+			int col = 0;
 			while (scn.hasNextLine()) {
 				line = scn.nextLine();
 				numColumns = line.split(",").length;
 				numRows++;
+				col = 0;
 				temp = "";
 				for (int indx = 0; indx < line.length(); indx++) {
 					// last index in a line
 					if (indx == line.length() - 1) {
 						temp += line.charAt(indx);
 						if (temp.equals("W")) {
-							WalkWayCell wc = new WalkWayCell(temp);
+							WalkWayCell wc = new WalkWayCell(temp, row, col);
 							cells.add(wc);
 						} else if (temp.length() > 1) {
-							RoomCell rc = new RoomCell(temp);
+							RoomCell rc = new RoomCell(temp, row, col);
 							rc.initial = temp.charAt(0);
 							if (temp.charAt(1) == 'U') {
 								rc.setDoorDir(DoorDirection.UP);
@@ -136,11 +153,12 @@ public class Board {
 							rc.setDoorway(true);
 							cells.add(rc);
 						} else {
-							RoomCell rc = new RoomCell(temp);
+							RoomCell rc = new RoomCell(temp, row, col);
 							rc.initial = temp.charAt(0);
 							cells.add(rc);
 						}
 						temp = "";
+						col++;
 					}
 
 					else if (line.charAt(indx) != ',') {
@@ -149,10 +167,10 @@ public class Board {
 
 					else {
 						if (temp.equals("W")) {
-							WalkWayCell wc = new WalkWayCell(temp);
+							WalkWayCell wc = new WalkWayCell(temp, row, col);
 							cells.add(wc);
 						} else if (temp.length() > 1) {
-							RoomCell rc = new RoomCell(temp);
+							RoomCell rc = new RoomCell(temp, row, col);
 							rc.initial = temp.charAt(0);
 							if (temp.charAt(1) == 'U') {
 								rc.setDoorDir(DoorDirection.UP);
@@ -169,14 +187,16 @@ public class Board {
 							rc.setDoorway(true);
 							cells.add(rc);
 						} else {
-							RoomCell rc = new RoomCell(temp);
+							RoomCell rc = new RoomCell(temp, row, col);
 							rc.initial = temp.charAt(0);
 							rc.setRoom(true);
 							cells.add(rc);
 						}
+						col++;
 						temp = "";
 					}
 				}
+				row++;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -519,5 +539,17 @@ public class Board {
 	}
 	public void setHumanPlayer(HumanPlayer p){
 		humanPlayer = p;
+	}
+	
+	public void initializePlayers() {
+		humanPlayer = new HumanPlayer("Miss Scarlet", Color.red, getCellAt(14,22));
+		computerPlayers.clear();
+		computerPlayers.add(new ComputerPlayer("Mrs. Peacock", Color.blue, getCellAt(0,3)));
+		System.out.println("stuffz" + getCellAt(0,3).getCol());
+		computerPlayers.add(new ComputerPlayer("Colonel Mustard", Color.yellow, getCellAt(21,15)));
+		computerPlayers.add(new ComputerPlayer("Mrs. White", Color.white, getCellAt(12,0)));
+		computerPlayers.add(new ComputerPlayer("Professor Plum", Color.magenta, getCellAt(0,19)));
+		computerPlayers.add(new ComputerPlayer("Reverend Green", Color.green, getCellAt(21,6)));
+		
 	}
 }

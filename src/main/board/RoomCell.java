@@ -2,10 +2,12 @@ package main.board;
 
 public class RoomCell extends BoardCell{
 	
-	public RoomCell(String cellChar) {
-		super(cellChar);
-	}
+	
     
+	public RoomCell(String cellChar, int row, int col) {
+		super(cellChar, row, col);
+	}
+
 	@Override
     public void draw() {
         throw new UnsupportedOperationException("Not supported yet.");

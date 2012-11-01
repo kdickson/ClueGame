@@ -2,8 +2,10 @@ package main.board;
 
 public class WalkWayCell extends BoardCell{
 
-    public WalkWayCell(String init) {
-		super(init);
+	
+
+	public WalkWayCell(String cellChar, int row, int col) {
+		super(cellChar, row, col);
 	}
 
 	@Override

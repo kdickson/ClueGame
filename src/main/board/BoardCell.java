@@ -9,11 +9,15 @@ public abstract class BoardCell {
     private boolean room = false;
     private boolean walkway = false;
     
-    public BoardCell(String cellChar) {
-    	this.cellChar = cellChar;
-    }
-	
-    public void setWalkway(boolean w){
+
+    
+    public BoardCell(String cellChar, int row, int col) {
+		this.row = row;
+		this.col = col;
+		this.cellChar = cellChar;
+	}
+
+	public void setWalkway(boolean w){
         this.walkway = w;
     }
     

@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.fail;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,17 +16,24 @@ import main.board.HumanPlayer;
 import main.board.Player;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class GameActionsTests {
 	Board b;
-	Card scarlet,knife,hall,green,candlestick,study,library,white,rope;
+	static Card scarlet,knife,hall,green,candlestick,study,library,white,rope;
 	@Before
 	public void tester() throws BadConfigException{
 		b = new Board();
 		b.loadConfigFiles("work1.csv");
 		b.loadLegend("initials.csv");
 		b.calcAdjacencies();
+		b.initializePlayers();
+		b.initializeDeck();
+		b.deal();
+	}
+	@BeforeClass
+	public static void initTestCards() {
 		scarlet = new Card("Miss Scarlet",Card.CardType.PERSON);
 		knife = new Card("Knife",Card.CardType.WEAPON);
 		hall = new Card("HALL",Card.CardType.ROOM);
@@ -35,7 +43,6 @@ public class GameActionsTests {
 		library = new Card("LIBRARY",Card.CardType.ROOM);
 		white = new Card("Mrs. White",Card.CardType.PERSON);
 		rope = new Card("Rope",Card.CardType.WEAPON);
-		b.deal();
 	}
 	
 	@Test
@@ -51,9 +58,8 @@ public class GameActionsTests {
 	
 	@Test
 	public void testTargetRandomSelection() {
-		ComputerPlayer player = new ComputerPlayer();
+		ComputerPlayer player = new ComputerPlayer("Reverend Green", Color.green);
 		// Pick a location with no rooms in target, just three targets
-		System.out.println("going to call bal");
 		b.calcTargets(b.calcRoomIndex(14, 0), 2);
 		int loc_12_0Tot = 0;
 		int loc_14_2Tot = 0;
@@ -80,7 +86,7 @@ public class GameActionsTests {
 
 	@Test
 	public void testTargetRandomSelectionFromJustVisitingRoom() {
-		ComputerPlayer player = new ComputerPlayer();
+		ComputerPlayer player = new ComputerPlayer("Reverend Green", Color.green);
 		player.setPreviousLocation(b.getCellAt(4,2));
 		// Pick a location that you can move into a room you were just in
 		b.calcTargets(b.calcRoomIndex(4, 4), 2);
@@ -124,7 +130,7 @@ public class GameActionsTests {
 	
 	@Test
 	public void testTargetGoToNewRoom() {
-		ComputerPlayer player = new ComputerPlayer();
+		ComputerPlayer player = new ComputerPlayer("Reverend Green", Color.green);
 		player.setPreviousLocation(b.getCellAt(2,4));
 		// Pick a location that you can move into a room you were just in
 		b.calcTargets(b.calcRoomIndex(4, 4), 2);
@@ -165,7 +171,7 @@ public class GameActionsTests {
 	
 	@Test
 	public void testOnePlayerOneMatch(){
-		Player p = new Player();
+		Player p = new Player("Reverend Green", Color.green);
 		p.addCard(scarlet);
 		p.addCard(candlestick);
 		p.addCard(green);
@@ -173,20 +179,18 @@ public class GameActionsTests {
 		p.addCard(knife);
 		p.addCard(study);
 		//disprove weapon
-		System.out.println("assertihng");
 		Assert.assertEquals(knife,p.disproveSuggestion(white, library, knife));
 		//disprove person
 		Assert.assertEquals(green,p.disproveSuggestion(green, library, rope));
 		//disprove room
 		Assert.assertEquals(hall,p.disproveSuggestion(white, hall, rope));
 		//check can't disprove
-		System.out.println("what's it returning?");
 		Assert.assertEquals(null,p.disproveSuggestion(white, library, rope));
 	}
 	
 	@Test
 	public void testMultiplePossibleMatches(){
-		Player p = new Player();
+		Player p = new Player("Reverend Green", Color.green);
 		p.addCard(scarlet);
 		p.addCard(candlestick);
 		p.addCard(study);
@@ -211,10 +215,11 @@ public class GameActionsTests {
 	}
 	@Test
 	public void testAllPlayersQueried(){
-		HumanPlayer hp = new HumanPlayer();
+		HumanPlayer hp = new HumanPlayer("Miss Scarlet", Color.red);
 		b.setHumanPlayer(hp);
-		ComputerPlayer cp1 = new ComputerPlayer();
-		ComputerPlayer cp2 = new ComputerPlayer();
+		ComputerPlayer cp1 = new ComputerPlayer("Reverend Green", Color.green);
+		ComputerPlayer cp2 = new ComputerPlayer("Mrs. White", Color.white);
+		b.computerPlayers.clear();
 		Assert.assertTrue(b.computerPlayers.isEmpty());
 		b.computerPlayers.add(cp1);
 		b.computerPlayers.add(cp2);
@@ -253,7 +258,7 @@ public class GameActionsTests {
 	@Test
 	public void testComputerPlayerMakingSuggestion(){
 		//one correct suggestion
-		ComputerPlayer cp1 = new ComputerPlayer();
+		ComputerPlayer cp1 = new ComputerPlayer("Reverend Green", Color.green);
 		cp1.resetUnseenCards();
 		System.out.println("the size of Board.deck is " + Board.getMasterDeck().size());
 		for(Card c :Board.getMasterDeck()) {
@@ -275,7 +280,7 @@ public class GameActionsTests {
 	@Test
 	public void testComputerPlayerMakingMultipleSuggestions(){
 		//one correct suggestion
-		ComputerPlayer cp1 = new ComputerPlayer();
+		ComputerPlayer cp1 = new ComputerPlayer("Reverend Green", Color.green);
 		cp1.resetUnseenCards();
 		int greenAccused = 0;
 		int scarletAccused = 0;

@@ -10,6 +10,24 @@ public class Player {
 	public ArrayList<Card> cardsInHand = new ArrayList<Card>();
 	public Color color;
 	public BoardCell currentLocation;
+	
+	public Player(String name, Color color) {
+		this.name = name;
+		this.color = color;
+	}
+	
+	
+
+
+	public Player(String name, Color color, BoardCell currentLocation) {
+		this.name = name;
+		this.color = color;
+		this.currentLocation = currentLocation;
+	}
+
+
+
+
 	public Card disproveSuggestion(Card person, Card room, Card weapon){
 
 		boolean isPerson = false, isRoom = false, isWeapon = false;

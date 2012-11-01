@@ -21,29 +21,30 @@ public class GameSetupTest {
 		b = new Board();
 		b.loadConfigFiles("work1.csv");
 		b.loadLegend("initials.csv");
-		b.deal();
+		b.initializePlayers();
+		b.initializeDeck();
 	}
 	
 	@Test
 	public void testLoadingPeople() {
 		//Test first 
 		ComputerPlayer p = b.computerPlayers.get(0);
-		Assert.assertEquals("Ms.Peacock", p.name);
+		Assert.assertEquals("Mrs. Peacock", p.name);
 		Assert.assertEquals(Color.BLUE, p.color);
-		Assert.assertEquals(42, p.currentLocation.getRow());
-		Assert.assertEquals(21, p.currentLocation.getCol());
+		Assert.assertEquals(0, p.currentLocation.getRow());
+		Assert.assertEquals(3, p.currentLocation.getCol());
 		//Test last 
 		p = b.computerPlayers.get(4);
 		Assert.assertEquals("Reverend Green", p.name);
 		Assert.assertEquals(Color.GREEN, p.color);
-		Assert.assertEquals(11, p.currentLocation.getRow());
-		Assert.assertEquals(18, p.currentLocation.getCol());
+		Assert.assertEquals(21, p.currentLocation.getRow());
+		Assert.assertEquals(6, p.currentLocation.getCol());
 		//Test human 
 		HumanPlayer h = b.humanPlayer;
 		Assert.assertEquals("Miss Scarlet", h.name);
 		Assert.assertEquals(Color.RED, h.color);
-		Assert.assertEquals(8, h.currentLocation.getRow());
-		Assert.assertEquals(24, h.currentLocation.getCol());
+		Assert.assertEquals(14, h.currentLocation.getRow());
+		Assert.assertEquals(22, h.currentLocation.getCol());
 	}
 	@Test
 	public void testLoadingCards() {
@@ -85,6 +86,7 @@ public class GameSetupTest {
 		Assert.assertEquals(0,b.deck.size());
 		//All players have roughly (within one) the same number cards
 		int humanTotalCards = b.humanPlayer.cardsInHand.size();
+		Assert.assertTrue(humanTotalCards > 0);
 		for(ComputerPlayer p: b.computerPlayers){
 			Assert.assertTrue(Math.abs(humanTotalCards-p.cardsInHand.size()) <=1);
 		}
