@@ -35,12 +35,12 @@ public class GameActionsTests {
 		library = new Card("LIBRARY",Card.CardType.ROOM);
 		white = new Card("Mrs. White",Card.CardType.PERSON);
 		rope = new Card("Rope",Card.CardType.WEAPON);
+		b.deal();
 	}
 	
 	@Test
 	public void checkAccusing() {
 
-		
 		b.setAnswer(scarlet, hall, knife);
 		Assert.assertTrue(b.checkAccusation(scarlet,hall , knife));
 		Assert.assertFalse(b.checkAccusation(green, hall, knife));

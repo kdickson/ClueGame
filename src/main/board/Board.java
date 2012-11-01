@@ -49,6 +49,30 @@ public class Board {
 		answerWeapon = weapon;
 	}
 	public void deal(){
+		Set<Character> theRooms = rooms.keySet();
+		//add all of the room cards
+		deck = new ArrayList<Card>();
+		for(Character room : theRooms){
+			if(!room.equals('W') && !room.equals('X'))
+				deck.add( new Card( rooms.get(room),Card.CardType.ROOM));
+		}
+		System.out.println("the size of deck is " + deck.size());
+		//add persons
+		deck.add( new Card("Miss Scarlet",Card.CardType.PERSON));
+		deck.add( new Card("Colonel Mustard",Card.CardType.PERSON));
+		deck.add( new Card("Mrs. White",Card.CardType.PERSON));
+		deck.add( new Card("Reverend Green",Card.CardType.PERSON));
+		deck.add( new Card("Mrs. Peacock",Card.CardType.PERSON));
+		deck.add( new Card("Professor Plum",Card.CardType.PERSON));
+		
+		//add weapons
+		deck.add(new Card("Knife",Card.CardType.WEAPON));
+		deck.add(new Card("Rope",Card.CardType.WEAPON));
+		deck.add(new Card("Candlestick",Card.CardType.WEAPON));
+		deck.add(new Card("Lead Pipe",Card.CardType.WEAPON));
+		deck.add(new Card("Revolver",Card.CardType.WEAPON));
+		deck.add(new Card("Wrench",Card.CardType.WEAPON));
+//		deck = new ArrayList<Card>();
 		
 	}
 	// ---DONE---
